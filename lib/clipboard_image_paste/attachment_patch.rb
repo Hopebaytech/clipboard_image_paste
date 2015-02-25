@@ -126,11 +126,13 @@ unless Project.included_modules.include? AttachmentPatch
 end
 
 # KbArticle plug-in (https://github.com/alexbevi/redmine_knowledgebase)
-begin
-  unless KbArticle.included_modules.include? AttachmentPatch
-    KbArticle.send(:include, AttachmentPatch)
+if defined? KbArticle
+  begin
+    unless KbArticle.included_modules.include? AttachmentPatch
+      KbArticle.send(:include, AttachmentPatch)
+    end
+  rescue NameError => e
+    # plug-in not installed
+    raise if e.name != nil
   end
-rescue NameError => e
-  # plug-in not installed
-  raise if e.name != nil
 end
